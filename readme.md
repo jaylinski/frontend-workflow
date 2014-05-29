@@ -7,16 +7,16 @@ Frontend workflow with [Gulp](https://github.com/gulpjs/gulp) and [Bower](https:
 Installation
 ------------
 
-1. [Install](http://nodejs.org/) node.js
-2. Install gulp `npm install -g gulp`
-2. Install bower `npm install -g bower`
+1. Install [node.js](http://nodejs.org/)
+2. Install Gulp `npm install -g gulp`
+2. Install Bower `npm install -g bower`
 3. Install dependencies `npm install`
 
 
 How to use
 ----------
 
-Run `gulp bower` to fetch current bower dependencies. The main files are copied into the `build` directory.
+Run `gulp bower` to fetch current Bower dependencies. The main files are copied to the directory `build`.
 
 Install a browser live-reload plugin to make use of `gulp-livereload`.
 
