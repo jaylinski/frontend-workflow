@@ -3,6 +3,7 @@
 	"description": "Workflow for frontend projects with Gulp and Bower.",
 	"version": "0.0.1",
 	"devDependencies": {
+		"bower": "1.3.*",
 		"gulp": "3.6.*",
 		"gulp-clean": "0.3.*",
 		"gulp-changed": "0.3.*",

@@ -11,9 +11,9 @@ var livereload= require('gulp-livereload');
 var watch     = require('gulp-watch');
 
 var srcPaths = {
-	scripts: ['source/js/**/*'],
-	less:    ['source/less/**/*'],
-	images:  ['source/img/**/*']
+	scripts: ['src/js/**/*'],
+	less:    ['src/less/**/*'],
+	images:  ['src/img/**/*']
 };
 
 gulp.task('watch', function() {
