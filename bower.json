@@ -4,13 +4,14 @@
 	"ignore": [
 		".jshintrc",
 		"**/*.txt",
-	    "*.md",
-		"Gruntfile.js",
+		"*.md",
+		"gulpfile.js",
 		"package.json",
-		"build"
+		"build",
+		"node_modules"
 	],
 	"dependencies": {
-		"bootstrap": "3.1.*",
+		"bootstrap": "3.2.*",
 		"jquery": "2.1.*"
 	},
 	"devDependencies": {
