@@ -74,7 +74,9 @@ gulp.task('less', function() {
 	// Minify and copy all LESS
 	return gulp.src(srcPaths.less)
 		.pipe($.changed(destPaths.styles))
-		.pipe($.less())
+		.pipe($.less()
+			.on('error', $.util.log)
+		)
 		.pipe($.minifyCss())
 		.pipe(gulp.dest(destPaths.styles))
 		.pipe($.size({title: 'styles'}))
