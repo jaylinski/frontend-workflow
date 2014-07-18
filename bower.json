@@ -1,8 +1,9 @@
 {
 	"name": "frontend-workflow",
-	"version": "0.0.1",
+	"version": "0.1.0",
 	"ignore": [
 		".jshintrc",
+		".travis.yml",
 		"**/*.txt",
 		"*.md",
 		"gulpfile.js",

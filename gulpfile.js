@@ -1,8 +1,10 @@
 /**
  *
- *  Frontend Workfow
- *
- *  Licensed under the MIT License
+ * Frontend workflow with Gulp, Bower and Swig.
+ * 
+ * @author https://github.com/jaylinski
+ * @source https://github.com/jaylinski/frontend-workflow
+ * @license https://github.com/jaylinski/frontend-workflow#copyright-and-license
  *
  */
 
