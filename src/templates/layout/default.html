@@ -3,43 +3,14 @@
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
-	<head>
-		<meta charset="utf-8">
-		<meta name="description" content="">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		
-		<title>{% block title %}Default Layout{% endblock %}</title>
-		
-		<link rel="shortcut icon" type="image/x-icon" href="">
-		
-		<!-- Add to homescreen for Chrome on Android -->
-		<meta name="mobile-web-app-capable" content="yes">
-		<link rel="icon" sizes="196x196" href="images/touch/chrome-touch-icon-196x196.png">
-
-		<!-- Add to homescreen for Safari on iOS -->
-		<!-- https://developer.apple.com/library/ios/documentation/AppleApplications/Reference/SafariWebContent/ConfiguringWebApplications/ConfiguringWebApplications.html -->
-		<meta name="apple-mobile-web-app-capable" content="yes">
-		<meta name="apple-mobile-web-app-status-bar-style" content="black">
-		<meta name="apple-mobile-web-app-title" content="Frontend Workflow">
-		
-		<link rel="apple-touch-icon" href="">
-		<link rel="apple-touch-icon-precomposed" href="">
-		<link rel="apple-touch-icon-114x114" href="">
-		<link rel="apple-touch-icon-114x114-precomposed" href="">
-		
-		<!-- Tile icon for Win8 (144x144 + tile color) -->
-		<meta name="msapplication-TileImage" content="images/touch/ms-touch-icon-144x144-precomposed.png">
-		<meta name="msapplication-TileColor" content="#3372DF">
-		
-		<!-- build:css styles/components/main.min.css -->
-		<link rel="stylesheet" href="css/all.min.css">
-		<!-- endbuild -->
+	<head>		
+		{% include '../includes/header.html' %}
 	</head>
 	<body>
-		<h1>Test</h1>
+		{% include '../includes/navigation.html' %}
 		
-		<!-- build:js js/main.min.js -->
-		<script src="js/main.js"></script>
-		<!-- endbuild -->
+		{% block content %}Content{% endblock %}
+		
+		{% include '../includes/footer.html' %}
 	</body>
 </html>

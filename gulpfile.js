@@ -9,9 +9,10 @@
 'use strict';
 
 var gulp = require('gulp');
-var $ = require('gulp-load-plugins')();
 var pagespeed = require('psi');
 var bower = require('bower');
+var bowermainfiles = require('main-bower-files')
+var $ = require('gulp-load-plugins')();
 
 var swigopts = {
 	defaults: { cache: false }
@@ -28,7 +29,8 @@ var destPaths = {
 	html:     'build',
 	scripts:  'build/js',
 	styles:   'build/css',
-	images:   'build/img'
+	images:   'build/img',
+	lib:      'build/lib'
 };
  
 gulp.task('scripts', function() {
@@ -36,7 +38,7 @@ gulp.task('scripts', function() {
 	return gulp.src(srcPaths.scripts)
 		.pipe($.changed(destPaths.scripts))
 		.pipe($.uglify())
-		.pipe($.concat('all.min.js'))
+		.pipe($.concat('main.min.js'))
 		.pipe(gulp.dest(destPaths.scripts))
 		.pipe($.livereload());
 });
@@ -52,9 +54,9 @@ gulp.task('images', function() {
 });
 
 gulp.task('html', function() {
-	return gulp.src(srcPaths.html)
-		.pipe($.changed(destPaths.html))
-		.pipe($.swig(swigopts))		
+	return gulp.src(srcPaths.html)		
+		.pipe($.swig(swigopts))
+		.pipe($.prettify({indentSize: 2}))
 		.pipe(gulp.dest(destPaths.html))
 		.pipe($.livereload());
 });
@@ -71,7 +73,6 @@ gulp.task('less', function() {
 		.pipe($.changed(destPaths.styles))
 		.pipe($.less())
 		.pipe($.minifyCss())
-		.pipe($.concat('all.min.css'))
 		.pipe(gulp.dest(destPaths.styles))
 		.pipe($.livereload());
 });
@@ -89,18 +90,10 @@ gulp.task('watch', function() {
 });
 
 gulp.task('bower', function() {
-	console.log("[bower] Executing update...");
-	bower.commands.update().on("end", function(results) {
-		if(Object.getOwnPropertyNames(results).length === 0) {
-			console.log("[bower] Everything up-to-date");
-		} else {
-			console.log(results);
-		}		
-		bower.commands.list({paths: true}).on("end", function(results) {
-			console.log("[bower] Copying main files...");
-			console.log(results);
-		});
-	});	
+	return gulp.src(bowermainfiles(), {base: 'bower_components'})
+		.pipe($.if('*.css', $.minifyCss()))
+		.pipe($.if('*.js', $.uglify()))
+		.pipe(gulp.dest(destPaths.lib));
 });
 
 gulp.task('clean', function () {  
@@ -109,4 +102,4 @@ gulp.task('clean', function () {
 });
 
 gulp.task('default', ['scripts', 'jshint', 'less', 'images', 'html', 'watch']);
-gulp.task('prod',    ['clean', 'scripts', 'jshint', 'less', 'images', 'html', 'htmlminify']);
+gulp.task('prod',    ['clean', 'bower', 'scripts', 'jshint', 'less', 'images', 'html', 'htmlminify']);
