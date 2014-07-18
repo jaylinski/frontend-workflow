@@ -1,7 +1,7 @@
 Frontend Workflow
 =================
 
-Frontend workflow with [Gulp](https://github.com/gulpjs/gulp) and [Bower](https://github.com/bower/bower).
+Frontend workflow with [Gulp](https://github.com/gulpjs/gulp), [Bower](https://github.com/bower/bower) and [Swig](https://github.com/paularmstrong/swig).
 
 
 Installation
@@ -16,7 +16,7 @@ Installation
 How to use
 ----------
 
-Run `gulp bower` to fetch current Bower dependencies. The main files are copied to the directory `build`.
+Run `gulp bower` to fetch current Bower dependencies. The main files are copied to the directory `build/lib`.
 
 Install a browser live-reload plugin to make use of `gulp-livereload`.
 
