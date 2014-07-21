@@ -25,13 +25,17 @@ var srcPaths = {
 	htmlcompiled:['build/*.html'],
 	scripts:     ['src/js/**/*.js'],
 	less:        ['src/less/**/*.less'],
-	images:      ['src/img/**/*']
+	images:      ['src/img/**/*'],
+	fonts:       ['src/fonts/**/*'],
+	assets:      ['src/assets/**/*']
 };
 var destPaths = {
 	html:     'build',
 	scripts:  'build/js',
 	styles:   'build/css',
 	images:   'build/img',
+	fonts:    'build/fonts',
+	assets:   'build/assets',
 	lib:      'build/lib'
 };
  
@@ -56,6 +60,18 @@ gulp.task('images', function() {
 		.pipe($.size({title: 'images'}));
 });
 
+gulp.task('fonts', function() {
+	return gulp.src(srcPaths.fonts)
+		.pipe($.changed(destPaths.fonts))
+		.pipe(gulp.dest(destPaths.fonts));
+});
+
+gulp.task('assets', function() {
+	return gulp.src(srcPaths.assets)
+		.pipe($.changed(destPaths.assets))
+		.pipe(gulp.dest(destPaths.assets));
+});
+
 gulp.task('html', function() {
 	return gulp.src(srcPaths.html)		
 		.pipe($.swig(swigopts))
@@ -65,7 +81,7 @@ gulp.task('html', function() {
 });
 
 gulp.task('htmlminify', function() {
-	return gulp.src(srcPaths.htmlcomp)
+	return gulp.src(srcPaths.htmlcompiled)
 		.pipe($.minifyHtml())
 		.pipe(gulp.dest(destPaths.html));
 });
@@ -85,7 +101,8 @@ gulp.task('less', function() {
 
 gulp.task('jshint', function () {
 	return gulp.src(srcPaths.scripts)
-		.pipe($.jshint());
+		.pipe($.jshint())
+		.pipe($.jshint.reporter('default'));
 });
 
 gulp.task('bower', function() {
@@ -107,5 +124,5 @@ gulp.task('watch', function() {
 	gulp.watch(srcPaths.htmlwatch, ['html']);
 });
 
-gulp.task('default', ['scripts', 'jshint', 'less', 'images', 'html', 'watch']);
-gulp.task('prod',    ['clean', 'bower', 'scripts', 'jshint', 'less', 'images', 'html', 'htmlminify']);
+gulp.task('default', ['scripts', 'jshint', 'images', 'less',  'fonts', 'assets', 'html', 'watch']);
+gulp.task('prod',    ['clean', 'bower', 'scripts', 'jshint', 'less', 'images', 'fonts', 'assets', 'html', 'htmlminify']);

@@ -1,1 +1,6 @@
-var foo = "foo";
+(function () {
+  'use strict';
+
+  var foo = 'foo';
+
+})();
