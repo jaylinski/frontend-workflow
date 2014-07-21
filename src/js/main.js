@@ -1,6 +1,6 @@
 (function () {
-  'use strict';
+	'use strict';
 
-  var foo = 'foo';
-
+	var foo = 'foo';
+	foo = 'newvalue';
 })();

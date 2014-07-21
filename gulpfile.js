@@ -24,7 +24,8 @@ var srcPaths = {
 	htmlwatch:   ['src/templates/**/*.html'],
 	htmlcompiled:['build/*.html'],
 	scripts:     ['src/js/**/*.js'],
-	less:        ['src/less/**/*.less'],
+	less:        ['src/less/*.less'],
+	lesswatch:   ['src/less/**/*.less'],
 	images:      ['src/img/**/*'],
 	fonts:       ['src/fonts/**/*'],
 	assets:      ['src/assets/**/*']
@@ -46,8 +47,7 @@ gulp.task('scripts', function() {
 		.pipe($.uglify())
 		.pipe($.concat('main.min.js'))
 		.pipe(gulp.dest(destPaths.scripts))
-		.pipe($.size({title: 'scripts'}))
-		.pipe($.livereload());
+		.pipe($.size({title: 'scripts'}));
 });
 
 gulp.task('images', function() {
@@ -76,8 +76,7 @@ gulp.task('html', function() {
 	return gulp.src(srcPaths.html)		
 		.pipe($.swig(swigopts))
 		.pipe($.prettify({indentSize: 2}))
-		.pipe(gulp.dest(destPaths.html))
-		.pipe($.livereload());
+		.pipe(gulp.dest(destPaths.html));
 });
 
 gulp.task('htmlminify', function() {
@@ -95,14 +94,25 @@ gulp.task('less', function() {
 		)
 		.pipe($.minifyCss())
 		.pipe(gulp.dest(destPaths.styles))
-		.pipe($.size({title: 'styles'}))
-		.pipe($.livereload());
+		.pipe($.size({title: 'styles'}));
 });
+
+gulp.task('checkcode', ['jshint', 'jscs', 'recess']);
 
 gulp.task('jshint', function () {
 	return gulp.src(srcPaths.scripts)
 		.pipe($.jshint())
 		.pipe($.jshint.reporter('default'));
+});
+
+gulp.task('jscs', function () {
+	return gulp.src(srcPaths.scripts)
+		.pipe($.jscs());
+});
+
+gulp.task('recess', function () {
+	return gulp.src(srcPaths.less)
+		.pipe($.recess());
 });
 
 gulp.task('bower', function() {
@@ -112,17 +122,18 @@ gulp.task('bower', function() {
 		.pipe(gulp.dest(destPaths.lib));
 });
 
-gulp.task('clean', function () {  
+gulp.task('clean', function () {
  	return gulp.src('build/**/*', {read: false})
 		.pipe($.clean());
 });
 
 gulp.task('watch', function() {
-	gulp.watch(srcPaths.scripts, ['scripts']);
-	gulp.watch(srcPaths.less, ['less']);
-	gulp.watch(srcPaths.images, ['images']);
-	gulp.watch(srcPaths.htmlwatch, ['html']);
+	$.livereload.listen();
+	gulp.watch(srcPaths.scripts, ['scripts']).on('change', $.livereload.changed);
+	gulp.watch(srcPaths.lesswatch, ['less']).on('change', $.livereload.changed);
+	gulp.watch(srcPaths.images, ['images']).on('change', $.livereload.changed);
+	gulp.watch(srcPaths.htmlwatch, ['html']).on('change', $.livereload.changed);
 });
 
-gulp.task('default', ['scripts', 'jshint', 'images', 'less',  'fonts', 'assets', 'html', 'watch']);
-gulp.task('prod',    ['clean', 'bower', 'scripts', 'jshint', 'less', 'images', 'fonts', 'assets', 'html', 'htmlminify']);
+gulp.task('default', ['scripts', 'less', 'checkcode', 'images', 'fonts', 'assets', 'html', 'watch']);
+gulp.task('prod',    ['clean', 'bower', 'scripts', 'less', 'checkcode', 'images', 'fonts', 'assets', 'html', 'htmlminify']);
