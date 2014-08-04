@@ -21,15 +21,18 @@ var swigopts = {
 };
 var srcPaths = {
 	html:        ['src/templates/*.html'],
-	htmlwatch:   ['src/templates/**/*.html'],
 	htmlcompiled:['build/*.html'],
 	scripts:     ['src/js/**/*.js'],
 	less:        ['src/less/*.less'],
-	lesswatch:   ['src/less/**/*.less'],
 	images:      ['src/img/**/*'],
 	fonts:       ['src/fonts/**/*'],
 	assets:      ['src/assets/**/*']
 };
+var watchPaths = {
+	htmlsrc:   ['src/templates/**/*.html'],
+	htmlbuild: ['build/**/*.html'],
+	less:      ['src/less/**/*.less']
+}
 var destPaths = {
 	html:     'build',
 	scripts:  'build/js',
@@ -130,9 +133,10 @@ gulp.task('clean', function () {
 gulp.task('watch', function() {
 	$.livereload.listen();
 	gulp.watch(srcPaths.scripts, ['scripts']).on('change', $.livereload.changed);
-	gulp.watch(srcPaths.lesswatch, ['less']).on('change', $.livereload.changed);
+	gulp.watch(watchPaths.less, ['less']).on('change', $.livereload.changed);
 	gulp.watch(srcPaths.images, ['images']).on('change', $.livereload.changed);
-	gulp.watch(srcPaths.htmlwatch, ['html']).on('change', $.livereload.changed);
+	gulp.watch(watchPaths.htmlsrc, ['html']);
+	gulp.watch(watchPaths.htmlbuild).on('change', $.livereload.changed);
 });
 
 gulp.task('default', ['scripts', 'less', 'checkcode', 'images', 'fonts', 'assets', 'html', 'watch']);
