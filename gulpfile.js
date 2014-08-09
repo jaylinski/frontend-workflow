@@ -151,10 +151,10 @@ gulp.task('pagespeed', pageSpeed.bind(null, {
 gulp.task('watch', function() {
 	$.livereload.listen();
 	
-	gulp.watch(watchPaths.scriptsrc, ['scripts']);
+	gulp.watch(watchPaths.scriptsrc, ['scripts', 'jshint', 'jscs']);
 	gulp.watch(watchPaths.scriptbuild).on('change', $.livereload.changed);
 	
-	gulp.watch(watchPaths.less, ['less']);
+	gulp.watch(watchPaths.less, ['less', 'recess']);
 	gulp.watch(watchPaths.css).on('change', $.livereload.changed);
 	
 	gulp.watch(watchPaths.imgsrc, ['images']);
