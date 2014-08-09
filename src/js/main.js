@@ -2,5 +2,5 @@
 	'use strict';
 
 	var foo = 'foo';
-	foo = 'newvalue';
+	foo = 'test';
 })();

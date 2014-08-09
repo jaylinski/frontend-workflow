@@ -11,14 +11,19 @@
 'use strict';
 
 var gulp = require('gulp');
-var pagespeed = require('psi');
+var pageSpeed = require('psi');
 var bower = require('bower');
-var bowermainfiles = require('main-bower-files')
+var bowerMainFiles = require('main-bower-files')
+var del = require('del');
 var $ = require('gulp-load-plugins')();
 
-var swigopts = {
+var swigOpts = {
 	defaults: { cache: false }
 };
+var pageSpeedOpts = {
+	url: 'https://www.github.com/',
+	strategy: 'mobile'
+}
 var srcPaths = {
 	html:        ['src/templates/*.html'],
 	htmlcompiled:['build/*.html'],
@@ -29,10 +34,15 @@ var srcPaths = {
 	assets:      ['src/assets/**/*']
 };
 var watchPaths = {
-	htmlsrc:   ['src/templates/**/*.html'],
-	htmlbuild: ['build/**/*.html'],
-	less:      ['src/less/**/*.less']
-}
+	htmlsrc:    ['src/templates/**/*.html'],
+	htmlbuild:  ['build/**/*.html'],
+	imgsrc:     srcPaths.images,
+	imgbuild:   ['build/img/**/*'],
+	scriptsrc:  srcPaths.scripts,
+	scriptbuild:['build/js/**/*.js'],
+	less:       ['src/less/**/*.less'],
+	css:        ['build/css/**/*.css']
+};
 var destPaths = {
 	html:     'build',
 	scripts:  'build/js',
@@ -77,13 +87,14 @@ gulp.task('assets', function() {
 
 gulp.task('html', function() {
 	return gulp.src(srcPaths.html)		
-		.pipe($.swig(swigopts))
+		.pipe($.swig(swigOpts))
 		.pipe($.prettify({indentSize: 2}))
 		.pipe(gulp.dest(destPaths.html));
 });
 
 gulp.task('htmlminify', function() {
-	return gulp.src(srcPaths.htmlcompiled)
+	return gulp.src(srcPaths.html)		
+		.pipe($.swig(swigOpts))
 		.pipe($.minifyHtml())
 		.pipe(gulp.dest(destPaths.html));
 });
@@ -118,26 +129,41 @@ gulp.task('recess', function () {
 		.pipe($.recess());
 });
 
-gulp.task('bower', function() {
-	return gulp.src(bowermainfiles(), {base: 'bower_components'})
+gulp.task('bower', function(callback) {
+	gulp.src(bowerMainFiles(), {base: 'bower_components'})
 		.pipe($.if('*.css', $.minifyCss()))
 		.pipe($.if('*.js', $.uglify()))
 		.pipe(gulp.dest(destPaths.lib));
+	callback();
 });
 
-gulp.task('clean', function () {
- 	return gulp.src('build/**/*', {read: false})
-		.pipe($.clean());
+gulp.task('clean', function(callback) {
+	del.sync(['build/**/*']);
+	callback();
 });
+
+// Run PageSpeed Insights
+gulp.task('pagespeed', pageSpeed.bind(null, {
+	url: pageSpeedOpts.url,
+	strategy: pageSpeedOpts.strategy
+}));
 
 gulp.task('watch', function() {
 	$.livereload.listen();
-	gulp.watch(srcPaths.scripts, ['scripts']).on('change', $.livereload.changed);
-	gulp.watch(watchPaths.less, ['less']).on('change', $.livereload.changed);
-	gulp.watch(srcPaths.images, ['images']).on('change', $.livereload.changed);
+	
+	gulp.watch(watchPaths.scriptsrc, ['scripts']);
+	gulp.watch(watchPaths.scriptbuild).on('change', $.livereload.changed);
+	
+	gulp.watch(watchPaths.less, ['less']);
+	gulp.watch(watchPaths.css).on('change', $.livereload.changed);
+	
+	gulp.watch(watchPaths.imgsrc, ['images']);
+	gulp.watch(watchPaths.imgbuild).on('change', $.livereload.changed);
+	
 	gulp.watch(watchPaths.htmlsrc, ['html']);
 	gulp.watch(watchPaths.htmlbuild).on('change', $.livereload.changed);
 });
 
 gulp.task('default', ['scripts', 'less', 'checkcode', 'images', 'fonts', 'assets', 'html', 'watch']);
-gulp.task('prod',    ['clean', 'bower', 'scripts', 'less', 'checkcode', 'images', 'fonts', 'assets', 'html', 'htmlminify']);
+gulp.task('prod',    ['clean', 'bower', 'scripts', 'less', 'checkcode', 'images', 'fonts', 'assets', 'htmlminify']);
+
