@@ -20,6 +20,10 @@ var $ = require('gulp-load-plugins')();
 var swigOpts = {
 	defaults: { cache: false }
 };
+var bowerOpts = {
+	directory: './bower_components',
+	base: 'bower_components'
+}
 var pageSpeedOpts = {
 	url: 'https://www.github.com/',
 	strategy: 'mobile'
@@ -129,8 +133,24 @@ gulp.task('recess', function () {
 		.pipe($.recess());
 });
 
-gulp.task('bower', function(callback) {
-	gulp.src(bowerMainFiles(), {base: 'bower_components'})
+gulp.task('bower', ['bower-install', 'bower-copy']);
+
+gulp.task('bower-install', function(callback) {
+	bower.commands.install([], {}, bowerOpts)
+		.on('log', function(result) {
+			$.util.log(['bower', $.util.colors.cyan(result.id), result.message].join(' '));
+		})
+		.on('error', function(error) {
+			$.util.log(error);
+			callback();
+		})
+		.on('end', function() {
+			callback();
+		});
+});
+
+gulp.task('bower-copy', ['bower-install'], function(callback) {
+	gulp.src(bowerMainFiles(), {base: bowerOpts.base})
 		.pipe($.if('*.css', $.minifyCss()))
 		.pipe($.if('*.js', $.uglify()))
 		.pipe(gulp.dest(destPaths.lib));
@@ -166,4 +186,3 @@ gulp.task('watch', function() {
 
 gulp.task('default', ['scripts', 'less', 'checkcode', 'images', 'fonts', 'assets', 'html', 'watch']);
 gulp.task('prod',    ['clean', 'bower', 'scripts', 'less', 'checkcode', 'images', 'fonts', 'assets', 'htmlminify']);
-
