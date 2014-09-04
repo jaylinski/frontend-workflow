@@ -9,7 +9,6 @@ Installation
 
 1. Install [node.js](http://nodejs.org/)
 2. Install Gulp `npm install -g gulp`
-2. Install Bower `npm install -g bower`
 3. Install dependencies `npm install`
 
 
