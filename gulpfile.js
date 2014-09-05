@@ -38,6 +38,8 @@ var srcPaths = {
 	assets:      ['src/assets/**/*']
 };
 var watchPaths = {
+	bowersrc:   ['bower.json'],
+	bowerbuild: ['build/lib/**/*'],
 	htmlsrc:    ['src/templates/**/*.html'],
 	htmlbuild:  ['build/**/*.html'],
 	imgsrc:     srcPaths.images,
@@ -170,6 +172,9 @@ gulp.task('pagespeed', pageSpeed.bind(null, {
 
 gulp.task('watch', function() {
 	$.livereload.listen();
+	
+	gulp.watch(watchPaths.bowersrc, ['bower']);
+	gulp.watch(watchPaths.bowerbuild).on('change', $.livereload.changed);
 	
 	gulp.watch(watchPaths.scriptsrc, ['scripts', 'jshint', 'jscs']);
 	gulp.watch(watchPaths.scriptbuild).on('change', $.livereload.changed);
