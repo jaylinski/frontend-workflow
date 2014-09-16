@@ -132,7 +132,8 @@ gulp.task('jscs', function () {
 
 gulp.task('recess', function () {
 	return gulp.src(srcPaths.less)
-		.pipe($.recess());
+		.pipe($.recess())
+		.pipe($.recess.reporter());
 });
 
 gulp.task('bower', ['bower-install', 'bower-copy']);
