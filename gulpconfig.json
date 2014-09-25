@@ -1,0 +1,49 @@
+{
+	"swigOpts": {
+		"defaults": {
+			"cache": false
+		}
+	},
+	"bowerOpts": {
+		"directory": "./bower_components",
+		"base": "bower_components"
+	},
+	"pageSpeedOpts": {
+		"url": "https://www.github.com/",
+		"strategy": "mobile"
+	},
+	"srcPaths": {
+		"clean":       ["build/**/*"],
+		"root":        ["src/*.*"],
+		"html":        ["src/templates/*.html"],
+		"htmlcompiled":["build/*.html"],
+		"scripts":     ["src/js/**/*.js"],
+		"less":        ["src/less/*.less"],
+		"images":      ["src/img/**/*"],
+		"fonts":       ["src/fonts/**/*"],
+		"assets":      ["src/assets/**/*"]
+	},
+	"watchPaths": {
+		"rootsrc":    ["src/*.*"],
+		"rootbuild":  ["build/*.*"],
+		"bowersrc":   ["bower.json"],
+		"bowerbuild": ["build/lib/**/*"],
+		"htmlsrc":    ["src/templates/**/*.html"],
+		"htmlbuild":  ["build/**/*.html"],
+		"imgsrc":     ["src/img/**/*"],
+		"imgbuild":   ["build/img/**/*"],
+		"scriptsrc":  ["src/js/**/*.js"],
+		"scriptbuild":["build/js/**/*.js"],
+		"less":       ["src/less/**/*.less"],
+		"css":        ["build/css/**/*.css"]
+	},
+	"destPaths": {
+		"root":     "build",
+		"scripts":  "build/js",
+		"styles":   "build/css",
+		"images":   "build/img",
+		"fonts":    "build/fonts",
+		"assets":   "build/assets",
+		"lib":      "build/lib"
+	}
+}

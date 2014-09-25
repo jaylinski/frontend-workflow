@@ -16,122 +16,86 @@ var bower = require('bower');
 var bowerMainFiles = require('main-bower-files')
 var del = require('del');
 var $ = require('gulp-load-plugins')();
+var config = require('./gulpconfig.json');
 
-var swigOpts = {
-	defaults: { cache: false }
-};
-var bowerOpts = {
-	directory: './bower_components',
-	base: 'bower_components'
-}
-var pageSpeedOpts = {
-	url: 'https://www.github.com/',
-	strategy: 'mobile'
-}
-var srcPaths = {
-	html:        ['src/templates/*.html'],
-	htmlcompiled:['build/*.html'],
-	scripts:     ['src/js/**/*.js'],
-	less:        ['src/less/*.less'],
-	images:      ['src/img/**/*'],
-	fonts:       ['src/fonts/**/*'],
-	assets:      ['src/assets/**/*']
-};
-var watchPaths = {
-	bowersrc:   ['bower.json'],
-	bowerbuild: ['build/lib/**/*'],
-	htmlsrc:    ['src/templates/**/*.html'],
-	htmlbuild:  ['build/**/*.html'],
-	imgsrc:     srcPaths.images,
-	imgbuild:   ['build/img/**/*'],
-	scriptsrc:  srcPaths.scripts,
-	scriptbuild:['build/js/**/*.js'],
-	less:       ['src/less/**/*.less'],
-	css:        ['build/css/**/*.css']
-};
-var destPaths = {
-	html:     'build',
-	scripts:  'build/js',
-	styles:   'build/css',
-	images:   'build/img',
-	fonts:    'build/fonts',
-	assets:   'build/assets',
-	lib:      'build/lib'
-};
- 
+gulp.task('root', function() {
+	return gulp.src(config.srcPaths.root)
+		.pipe(gulp.dest(config.destPaths.root));
+});
+
 gulp.task('scripts', function() {
 	// Minify and copy all JavaScript
-	return gulp.src(srcPaths.scripts)
-		.pipe($.changed(destPaths.scripts))
+	return gulp.src(config.srcPaths.scripts)
+		.pipe($.changed(config.destPaths.scripts))
 		.pipe($.uglify())
 		.pipe($.concat('main.min.js'))
-		.pipe(gulp.dest(destPaths.scripts))
+		.pipe(gulp.dest(config.destPaths.scripts))
 		.pipe($.size({title: 'scripts'}));
 });
 
 gulp.task('images', function() {
-	return gulp.src(srcPaths.images)
+	return gulp.src(config.srcPaths.images)
 		.pipe($.cache($.imagemin({
 			progressive: true,
 			interlaced: true
 		})))
-		.pipe(gulp.dest(destPaths.images))
+		.pipe(gulp.dest(config.destPaths.images))
 		.pipe($.size({title: 'images'}));
 });
 
 gulp.task('fonts', function() {
-	return gulp.src(srcPaths.fonts)
-		.pipe($.changed(destPaths.fonts))
-		.pipe(gulp.dest(destPaths.fonts));
+	return gulp.src(config.srcPaths.fonts)
+		.pipe($.changed(config.destPaths.fonts))
+		.pipe(gulp.dest(config.destPaths.fonts));
 });
 
 gulp.task('assets', function() {
-	return gulp.src(srcPaths.assets)
-		.pipe($.changed(destPaths.assets))
-		.pipe(gulp.dest(destPaths.assets));
+	return gulp.src(config.srcPaths.assets)
+		.pipe($.changed(config.destPaths.assets))
+		.pipe(gulp.dest(config.destPaths.assets));
 });
 
 gulp.task('html', function() {
-	return gulp.src(srcPaths.html)		
-		.pipe($.swig(swigOpts))
+	return gulp.src(config.srcPaths.html)		
+		.pipe($.swig(config.swigOpts))
 		.pipe($.prettify({indentSize: 2}))
-		.pipe(gulp.dest(destPaths.html));
+		.pipe(gulp.dest(config.destPaths.root));
 });
 
 gulp.task('htmlminify', function() {
-	return gulp.src(srcPaths.html)		
-		.pipe($.swig(swigOpts))
+	return gulp.src(config.srcPaths.html)		
+		.pipe($.swig(config.swigOpts))
 		.pipe($.minifyHtml())
-		.pipe(gulp.dest(destPaths.html));
+		.pipe(gulp.dest(config.destPaths.root));
 });
 
 gulp.task('less', function() {
 	// Minify and copy all LESS
-	return gulp.src(srcPaths.less)
-		.pipe($.changed(destPaths.styles))
+	return gulp.src(config.srcPaths.less)
+		.pipe($.changed(config.destPaths.styles))
 		.pipe($.less()
 			.on('error', $.util.log)
 		)
 		.pipe($.minifyCss())
-		.pipe(gulp.dest(destPaths.styles))
+		.pipe(gulp.dest(config.destPaths.styles))
 		.pipe($.size({title: 'styles'}));
 });
 
 gulp.task('checkcode', ['jshint', 'jscs', 'recess']);
 
 gulp.task('jshint', function () {
-	return gulp.src(srcPaths.scripts)
+	return gulp.src(config.srcPaths.scripts)
 		.pipe($.jshint())
 		.pipe($.jshint.reporter('default'));
 });
 
 gulp.task('jscs', function () {
-	return gulp.src(srcPaths.scripts)
+	return gulp.src(config.srcPaths.scripts)
 		.pipe($.jscs());
 });
 
 gulp.task('recess', function () {
-	return gulp.src(srcPaths.less)
+	return gulp.src(config.srcPaths.less)
 		.pipe($.recess())
 		.pipe($.recess.reporter());
 });
@@ -139,7 +103,7 @@ gulp.task('recess', function () {
 gulp.task('bower', ['bower-install', 'bower-copy']);
 
 gulp.task('bower-install', function(callback) {
-	bower.commands.install([], {}, bowerOpts)
+	bower.commands.install([], {}, config.bowerOpts)
 		.on('log', function(result) {
 			$.util.log(['bower', $.util.colors.cyan(result.id), result.message].join(' '));
 		})
@@ -153,42 +117,45 @@ gulp.task('bower-install', function(callback) {
 });
 
 gulp.task('bower-copy', ['bower-install'], function(callback) {
-	gulp.src(bowerMainFiles(), {base: bowerOpts.base})
+	gulp.src(bowerMainFiles(), {base: config.bowerOpts.base})
 		.pipe($.if('*.css', $.minifyCss()))
 		.pipe($.if('*.js', $.uglify()))
-		.pipe(gulp.dest(destPaths.lib));
+		.pipe(gulp.dest(config.destPaths.lib));
 	callback();
 });
 
 gulp.task('clean', function(callback) {
-	del.sync(['build/**/*']);
+	del.sync(config.srcPaths.clean);
 	callback();
 });
 
 // Run PageSpeed Insights
 gulp.task('pagespeed', pageSpeed.bind(null, {
-	url: pageSpeedOpts.url,
-	strategy: pageSpeedOpts.strategy
+	url: config.pageSpeedOpts.url,
+	strategy: config.pageSpeedOpts.strategy
 }));
 
 gulp.task('watch', function() {
 	$.livereload.listen();
 	
-	gulp.watch(watchPaths.bowersrc, ['bower']);
-	gulp.watch(watchPaths.bowerbuild).on('change', $.livereload.changed);
+	gulp.watch(config.watchPaths.rootsrc, ['root']);
+	gulp.watch(config.watchPaths.rootbuild).on('change', $.livereload.changed);
 	
-	gulp.watch(watchPaths.scriptsrc, ['scripts', 'jshint', 'jscs']);
-	gulp.watch(watchPaths.scriptbuild).on('change', $.livereload.changed);
+	gulp.watch(config.watchPaths.bowersrc, ['bower']);
+	gulp.watch(config.watchPaths.bowerbuild).on('change', $.livereload.changed);
 	
-	gulp.watch(watchPaths.less, ['less', 'recess']);
-	gulp.watch(watchPaths.css).on('change', $.livereload.changed);
+	gulp.watch(config.watchPaths.scriptsrc, ['scripts', 'jshint', 'jscs']);
+	gulp.watch(config.watchPaths.scriptbuild).on('change', $.livereload.changed);
 	
-	gulp.watch(watchPaths.imgsrc, ['images']);
-	gulp.watch(watchPaths.imgbuild).on('change', $.livereload.changed);
+	gulp.watch(config.watchPaths.less, ['less', 'recess']);
+	gulp.watch(config.watchPaths.css).on('change', $.livereload.changed);
 	
-	gulp.watch(watchPaths.htmlsrc, ['html']);
-	gulp.watch(watchPaths.htmlbuild).on('change', $.livereload.changed);
+	gulp.watch(config.watchPaths.imgsrc, ['images']);
+	gulp.watch(config.watchPaths.imgbuild).on('change', $.livereload.changed);
+	
+	gulp.watch(config.watchPaths.htmlsrc, ['html']);
+	gulp.watch(config.watchPaths.htmlbuild).on('change', $.livereload.changed);
 });
 
-gulp.task('default', ['scripts', 'less', 'checkcode', 'images', 'fonts', 'assets', 'html', 'watch']);
-gulp.task('prod',    ['clean', 'bower', 'scripts', 'less', 'checkcode', 'images', 'fonts', 'assets', 'htmlminify']);
+gulp.task('default', ['root', 'scripts', 'less', 'checkcode', 'images', 'fonts', 'assets', 'html', 'watch']);
+gulp.task('prod',    ['clean', 'bower', 'root', 'scripts', 'less', 'checkcode', 'images', 'fonts', 'assets', 'htmlminify']);
