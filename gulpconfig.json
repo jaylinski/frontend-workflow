@@ -12,6 +12,9 @@
 		"url": "https://www.github.com/",
 		"strategy": "mobile"
 	},
+	"htmlMinifyOpts": {
+		"conditionals": true
+	},
 	"srcPaths": {
 		"clean":       ["build/**/*"],
 		"root":        ["src/*.*"],

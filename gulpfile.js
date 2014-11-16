@@ -65,7 +65,7 @@ gulp.task('html', function() {
 gulp.task('htmlminify', function() {
 	return gulp.src(config.srcPaths.html)		
 		.pipe($.swig(config.swigOpts))
-		.pipe($.minifyHtml())
+		.pipe($.minifyHtml(config.htmlMinifyOpts))
 		.pipe(gulp.dest(config.destPaths.root));
 });
 
