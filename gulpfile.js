@@ -35,10 +35,11 @@ gulp.task('scripts', function() {
 
 gulp.task('images', function() {
 	return gulp.src(config.srcPaths.images)
-		.pipe($.cache($.imagemin({
+		.pipe($.changed(config.destPaths.images))
+		.pipe($.imagemin({
 			progressive: true,
 			interlaced: true
-		})))
+		}))
 		.pipe(gulp.dest(config.destPaths.images))
 		.pipe($.size({title: 'images'}));
 });
