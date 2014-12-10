@@ -13,10 +13,13 @@
 var gulp = require('gulp');
 var pageSpeed = require('psi');
 var bower = require('bower');
-var bowerMainFiles = require('main-bower-files')
+var bowerMainFiles = require('main-bower-files');
 var del = require('del');
 var $ = require('gulp-load-plugins')();
 var config = require('./gulpconfig.json');
+
+gulp.task('default', ['root', 'scripts', 'less', 'checkcode', 'images', 'fonts', 'assets', 'html', 'watch']);
+gulp.task('prod',    ['clean', 'bower', 'root', 'scripts', 'less', 'checkcode', 'images', 'fonts', 'assets', 'htmlminify']);
 
 gulp.task('root', function() {
 	return gulp.src(config.srcPaths.root)
@@ -158,5 +161,3 @@ gulp.task('watch', function() {
 	gulp.watch(config.watchPaths.htmlbuild).on('change', $.livereload.changed);
 });
 
-gulp.task('default', ['root', 'scripts', 'less', 'checkcode', 'images', 'fonts', 'assets', 'html', 'watch']);
-gulp.task('prod',    ['clean', 'bower', 'root', 'scripts', 'less', 'checkcode', 'images', 'fonts', 'assets', 'htmlminify']);
