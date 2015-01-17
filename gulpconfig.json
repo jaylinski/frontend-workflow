@@ -38,7 +38,9 @@
 		"scriptsrc":  ["src/js/**/*.js"],
 		"scriptbuild":["build/js/**/*.js"],
 		"less":       ["src/less/**/*.less"],
-		"css":        ["build/css/**/*.css"]
+		"css":        ["build/css/**/*.css"],
+		"assetsrc":   ["src/assets/**/*"],
+		"assetbuild": ["build/assets/**/*"]
 	},
 	"destPaths": {
 		"root":     "build",

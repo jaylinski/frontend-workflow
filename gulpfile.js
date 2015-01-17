@@ -59,16 +59,22 @@ gulp.task('assets', function() {
 		.pipe(gulp.dest(config.destPaths.assets));
 });
 
-gulp.task('html', function() {
+gulp.task('html', ['less'], function() {
 	return gulp.src(config.srcPaths.html)		
 		.pipe($.swig(config.swigOpts))
+		.pipe($.smoosher({
+			base: config.destPaths.root
+		}))
 		.pipe($.prettify({indentSize: 2}))
 		.pipe(gulp.dest(config.destPaths.root));
 });
 
-gulp.task('htmlminify', function() {
+gulp.task('htmlminify', ['less'], function() {
 	return gulp.src(config.srcPaths.html)		
 		.pipe($.swig(config.swigOpts))
+		.pipe($.smoosher({
+			base: config.destPaths.root
+		}))
 		.pipe($.minifyHtml(config.htmlMinifyOpts))
 		.pipe(gulp.dest(config.destPaths.root));
 });
@@ -145,13 +151,16 @@ gulp.task('watch', function() {
 	gulp.watch(config.watchPaths.rootsrc, ['root']);
 	gulp.watch(config.watchPaths.rootbuild).on('change', $.livereload.changed);
 	
+	gulp.watch(config.watchPaths.assetsrc, ['assets']);
+	gulp.watch(config.watchPaths.assetbuild).on('change', $.livereload.changed);
+	
 	gulp.watch(config.watchPaths.bowersrc, ['bower']);
 	gulp.watch(config.watchPaths.bowerbuild).on('change', $.livereload.changed);
 	
 	gulp.watch(config.watchPaths.scriptsrc, ['scripts', 'jshint', 'jscs']);
 	gulp.watch(config.watchPaths.scriptbuild).on('change', $.livereload.changed);
 	
-	gulp.watch(config.watchPaths.less, ['less', 'recess']);
+	gulp.watch(config.watchPaths.less, ['less', 'html', 'recess']);
 	gulp.watch(config.watchPaths.css).on('change', $.livereload.changed);
 	
 	gulp.watch(config.watchPaths.imgsrc, ['images']);
