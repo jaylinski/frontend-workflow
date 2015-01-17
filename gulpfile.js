@@ -79,9 +79,9 @@ gulp.task('htmlminify', ['less'], function() {
 		.pipe(gulp.dest(config.destPaths.root));
 });
 
-gulp.task('less', function() {
+gulp.task('less', function(callback) {
 	// Minify and copy all LESS
-	return gulp.src(config.srcPaths.less)
+	gulp.src(config.srcPaths.less)
 		.pipe($.changed(config.destPaths.styles))
 		.pipe($.less()
 			.on('error', $.util.log)
@@ -89,6 +89,7 @@ gulp.task('less', function() {
 		.pipe($.minifyCss())
 		.pipe(gulp.dest(config.destPaths.styles))
 		.pipe($.size({title: 'styles'}));
+	callback();
 });
 
 gulp.task('checkcode', ['jshint', 'jscs', 'recess']);
