@@ -1,7 +1,7 @@
 {
 	"name" : "frontend-workflow",
 	"description": "Workflow for frontend projects with Gulp, Bower and Swig.",
-	"version": "0.4.3",
+	"version": "0.4.4",
 	"devDependencies": {
 		"gulp": "3.8.*",
 		"gulp-cached": "1.0.*",

@@ -17,7 +17,7 @@
 	},
 	"srcPaths": {
 		"clean":       ["build/**/*"],
-		"root":        ["src/*.*"],
+		"root":        ["src/*.*", "bower_components/apache-server-configs/dist/.htaccess"],
 		"html":        ["src/templates/*.html"],
 		"htmlcompiled":["build/*.html"],
 		"scripts":     ["src/js/**/*.js"],

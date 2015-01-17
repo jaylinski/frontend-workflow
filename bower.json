@@ -1,6 +1,6 @@
 {
 	"name": "frontend-workflow",
-	"version": "0.4.3",
+	"version": "0.4.4",
 	"ignore": [
 		".jshintrc",
 		".jscsrc",
@@ -9,7 +9,8 @@
 	],
 	"dependencies": {
 		"bootstrap": "3.3.*",
-		"jquery": "2.1.*"
+		"jquery": "2.1.*",
+		"apache-server-configs": "2.11.*"
 	},
 	"devDependencies": {
 		
