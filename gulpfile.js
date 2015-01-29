@@ -114,25 +114,16 @@ gulp.task('recess', function () {
 gulp.task('bower', ['bower-install', 'bower-copy']);
 
 gulp.task('bower-install', function(callback) {
-	bower.commands.install([], {}, config.bowerOpts)
-		.on('log', function(result) {
-			$.util.log(['bower', $.util.colors.cyan(result.id), result.message].join(' '));
-		})
-		.on('error', function(error) {
-			$.util.log(error);
-			callback();
-		})
-		.on('end', function() {
-			callback();
-		});
+	$.bower()
+		.pipe(gulp.dest(config.bowerOpts.directory));
+	callback();
 });
 
-gulp.task('bower-copy', ['bower-install'], function(callback) {
-	gulp.src(bowerMainFiles(), {base: config.bowerOpts.base})
+gulp.task('bower-copy', ['bower-install'], function() {
+	return gulp.src(bowerMainFiles(), {base: config.bowerOpts.base})
 		.pipe($.if('*.css', $.minifyCss()))
 		.pipe($.if('*.js', $.uglify()))
 		.pipe(gulp.dest(config.destPaths.lib));
-	callback();
 });
 
 gulp.task('clean', function(callback) {

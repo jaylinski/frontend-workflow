@@ -4,6 +4,7 @@
 	"version": "0.4.4",
 	"devDependencies": {
 		"gulp": "3.8.*",
+		"gulp-bower": "0.0.*",
 		"gulp-cached": "1.0.*",
 		"gulp-changed": "1.0.*",
 		"gulp-concat": "2.4.*",
