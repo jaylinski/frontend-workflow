@@ -1,6 +1,8 @@
 Frontend Workflow
 =================
 
+> This project is outdated and not maintained anymore!
+
 Frontend workflow with [Gulp](https://github.com/gulpjs/gulp), [Bower](https://github.com/bower/bower) and [Swig](https://github.com/paularmstrong/swig).
 
 
